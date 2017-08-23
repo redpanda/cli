@@ -1,0 +1,4 @@
+NETWORK ID          NAME                DRIVER              SCOPE
+ID-bar              bar                 bridge              local
+networkID           defaultNetworkID    bridge              local
+ID-foo              foo                 host                local

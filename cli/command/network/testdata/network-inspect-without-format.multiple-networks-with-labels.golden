@@ -1,0 +1,52 @@
+[
+    {
+        "Name": "foo",
+        "Id": "ID-foo",
+        "Created": "0001-01-01T00:00:00Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "",
+            "Options": null,
+            "Config": null
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": null,
+        "Options": null,
+        "Labels": {
+            "foo": "bar"
+        }
+    },
+    {
+        "Name": "bar",
+        "Id": "ID-bar",
+        "Created": "0001-01-01T00:00:00Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "",
+            "Options": null,
+            "Config": null
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": null,
+        "Options": null,
+        "Labels": {
+            "foo": "bar"
+        }
+    }
+]

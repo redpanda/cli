@@ -2,12 +2,14 @@ package network
 
 import (
 	"fmt"
+	"strings"
 
 	"golang.org/x/net/context"
 
 	"github.com/docker/cli/cli"
 	"github.com/docker/cli/cli/command"
 	"github.com/docker/docker/api/types"
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -31,24 +33,29 @@ const ingressWarning = "WARNING! Before removing the routing-mesh network, " +
 func runRemove(dockerCli command.Cli, networks []string) error {
 	client := dockerCli.Client()
 	ctx := context.Background()
-	status := 0
+
+	var errs []string
 
 	for _, name := range networks {
-		if nw, _, err := client.NetworkInspectWithRaw(ctx, name, types.NetworkInspectOptions{}); err == nil &&
-			nw.Ingress &&
-			!command.PromptForConfirmation(dockerCli.In(), dockerCli.Out(), ingressWarning) {
+		nw, _, err := client.NetworkInspectWithRaw(ctx, name, types.NetworkInspectOptions{})
+		if err != nil {
+			errs = append(errs, err.Error())
+			continue
+		} else if nw.Ingress && !command.PromptForConfirmation(dockerCli.In(), dockerCli.Out(), ingressWarning) {
 			continue
 		}
+
 		if err := client.NetworkRemove(ctx, name); err != nil {
-			fmt.Fprintf(dockerCli.Err(), "%s\n", err)
-			status = 1
+			errs = append(errs, err.Error())
 			continue
 		}
+
 		fmt.Fprintf(dockerCli.Out(), "%s\n", name)
 	}
 
-	if status != 0 {
-		return cli.StatusError{StatusCode: status}
+	if len(errs) > 0 {
+		return errors.Errorf("%s", strings.Join(errs, "\n"))
 	}
+
 	return nil
 }
